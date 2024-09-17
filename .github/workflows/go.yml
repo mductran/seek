@@ -1,0 +1,24 @@
+name: seek
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: action/checkout@v3
+
+      - name: setup
+        uses: action/setup-go@v4
+        with:
+          go-version: '1.22'
+
+      - name: build
+        run: go build -v ./..
+
+      - name: test
+        run: go test -v ./..
