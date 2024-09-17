@@ -1,19 +1,20 @@
 package queries
 
 import (
-	"fmt"
 	"seeker/queries/syntax"
 	"strings"
 )
 
 type structure struct {
-	column syntax.SyntaxType
-	fileDb syntax.SyntaxType
+	column    syntax.SyntaxType
+	fileDb    syntax.SyntaxType
+	condition syntax.Condition
 }
 
 type Structure interface {
 	Column() syntax.SyntaxType
 	FileDB() syntax.SyntaxType
+	Condition() syntax.Condition
 }
 
 func (s *structure) Column() syntax.SyntaxType {
@@ -22,6 +23,10 @@ func (s *structure) Column() syntax.SyntaxType {
 
 func (s *structure) FileDB() syntax.SyntaxType {
 	return s.fileDb
+}
+
+func (s *structure) Condition() syntax.Condition {
+	return s.condition
 }
 
 func NewStructure(sql string) Result[Structure] {
@@ -35,8 +40,9 @@ func NewStructure(sql string) Result[Structure] {
 	f, alias := resolveFiles(s.Chunks()[3], s.Chunks()[5])
 
 	syntaxStructure := structure{
-		column: syntax.NewColumn(columns),
-		fileDb: syntax.NewFileDb(f, alias),
+		column:    syntax.NewColumn(columns),
+		fileDb:    syntax.NewFileDb(f, alias),
+		condition: resolveWhereClause(s.Chunks()[6:]),
 	}
 
 	resolveWhereClause(s.Chunks()[6:])
@@ -56,6 +62,7 @@ func resolveFiles(path, alias string) (string, string) {
 	return p[1], alias
 }
 
-func resolveWhereClause(chunks []string) {
-	fmt.Println(chunks)
+// resolveWhereClause TODO: avoid hardcode index
+func resolveWhereClause(chunks []string) syntax.Condition {
+	return syntax.NewCondition(chunks[1], chunks[2], chunks[3])
 }
