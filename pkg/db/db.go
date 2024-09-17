@@ -1,6 +1,9 @@
 package db
 
-import "seeker/pkg/queries"
+import (
+	"fmt"
+	"seeker/pkg/queries"
+)
 
 type db struct {
 	structure queries.Structure
@@ -11,6 +14,9 @@ type DB interface {
 }
 
 func (d *db) Run() (map[string]string, error) {
+	file := d.structure.FileDB()
+	fmt.Println(file.Alias(), file.Path())
+
 	return nil, nil
 }
 

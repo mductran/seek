@@ -1,12 +1,14 @@
 package syntax
 
+const ColumnType = "column"
+
 // column hold list of columns names
 type column struct {
 	columns []string
 }
 
 type Column interface {
-	HasColumn(colName string) bool
+	HasColumn(colName string) int
 }
 
 // HasColumn returns the column's index if the csv file has a column with name, and -1 otherwise
@@ -25,7 +27,7 @@ func (c *column) Type() string {
 	return ColumnType
 }
 
-func NewColumn(colNames []string) SyntaxType {
+func NewColumn(colNames []string) Column {
 	return &column{
 		columns: colNames,
 	}

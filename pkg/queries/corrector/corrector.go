@@ -3,9 +3,9 @@ package corrector
 import (
 	"fmt"
 	"os"
-	"seeker/queries"
-	"seeker/queries/operators"
-	"seeker/queries/splitter"
+	"seeker/pkg/queries"
+	"seeker/pkg/queries/operators"
+	"seeker/pkg/queries/splitter"
 	"strings"
 )
 
@@ -103,7 +103,7 @@ func checkOperator(op string) error {
 
 func checkValue(v string) error {
 	if v[0] != '\'' || v[len(v)-1] != '\'' {
-		return fmt.Errorf("invalid string comparison value. Comparison values should be in enclosed in single quotes: %w", queries.InvalidValueChunk)
+		return fmt.Errorf("invalid string comparison value. Comparison values should be in enclosed single quotes: %w", queries.InvalidValueChunk)
 	}
 
 	return nil

@@ -42,7 +42,7 @@ func TestCorrectorInvalidPathChunk(t *testing.T) {
 	assert.True(t, errors.Is(errs[0], queries.InvalidFilePathChunk))
 }
 
-func TestCorrectorINvalidFileNotExists(t *testing.T) {
+func TestCorrectorInvalidFileNotExists(t *testing.T) {
 	sql := `SELECT * FROM path:../../data.csv AS g`
 	errs := IsShallowSyntaxCorrect(splitter.NewSplitter(sql))
 	assert.Equal(t, 1, len(errs))

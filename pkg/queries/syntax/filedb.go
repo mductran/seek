@@ -1,5 +1,7 @@
 package syntax
 
+const FileDbType = "fileDb"
+
 type fileDb struct {
 	path  string
 	alias string
@@ -22,7 +24,7 @@ func (f *fileDb) Type() string {
 	return FileDbType
 }
 
-func NewFileDb(path, alias string) SyntaxType {
+func NewFileDb(path, alias string) FileDB {
 	return &fileDb{
 		path:  path,
 		alias: alias,

@@ -1,29 +1,29 @@
 package queries
 
 import (
-	"seeker/queries/corrector"
-	"seeker/queries/splitter"
-	"seeker/queries/syntax"
+	"seeker/pkg/queries/corrector"
+	"seeker/pkg/queries/splitter"
+	"seeker/pkg/queries/syntax"
 	"strings"
 )
 
 type structure struct {
-	column    syntax.SyntaxType
-	fileDb    syntax.SyntaxType
+	column    syntax.Column
+	fileDb    syntax.FileDB
 	condition syntax.Condition
 }
 
 type Structure interface {
-	Column() syntax.SyntaxType
-	FileDB() syntax.SyntaxType
+	Column() syntax.Column
+	FileDB() syntax.FileDB
 	Condition() syntax.Condition
 }
 
-func (s *structure) Column() syntax.SyntaxType {
+func (s *structure) Column() syntax.Column {
 	return s.column
 }
 
-func (s *structure) FileDB() syntax.SyntaxType {
+func (s *structure) FileDB() syntax.FileDB {
 	return s.fileDb
 }
 
@@ -49,7 +49,7 @@ func NewStructure(sql string) Result[Structure] {
 
 	resolveWhereClause(s.Chunks()[6:])
 
-	return NewResult[Structure](&syntaxStructure, []error{})
+	return NewResult[Structure](&syntaxStructure, nil)
 }
 
 func splitColumns(c string) []string {
