@@ -1,6 +1,8 @@
 package queries
 
 import (
+	"seeker/queries/corrector"
+	"seeker/queries/splitter"
 	"seeker/queries/syntax"
 	"strings"
 )
@@ -30,8 +32,8 @@ func (s *structure) Condition() syntax.Condition {
 }
 
 func NewStructure(sql string) Result[Structure] {
-	s := NewSplitter(sql)
-	errs := IsShallowSyntaxCorrect(s)
+	s := splitter.NewSplitter(sql)
+	errs := corrector.IsShallowSyntaxCorrect(s)
 	if len(errs) != 0 {
 		return NewResult[Structure](nil, errs)
 	}

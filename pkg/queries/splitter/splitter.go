@@ -1,4 +1,4 @@
-package queries
+package splitter
 
 import (
 	"regexp"
