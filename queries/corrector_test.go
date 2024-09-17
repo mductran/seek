@@ -53,3 +53,24 @@ func TestCorrectorInvalidAsChunk(t *testing.T) {
 	assert.Equal(t, 1, len(errs))
 	assert.True(t, errors.Is(errs[0], InvalidFromChunk))
 }
+
+func TestCorrectorWhereClause(t *testing.T) {
+	sql := `SELECT * FROM path:../../testdata/data.csv AS g WHERE a b`
+	errs := IsShallowSyntaxCorrect(NewSplitter(sql))
+	assert.Equal(t, 1, len(errs))
+	assert.True(t, errors.Is(errs[0], InvalidWhereClause))
+}
+
+func TestCorrectorWhereClauseOperator(t *testing.T) {
+	sql := `SELECT * FROM path:../../testdata/data.csv AS g WHERE a & 'b'`
+	errs := IsShallowSyntaxCorrect(NewSplitter(sql))
+	assert.Equal(t, 1, len(errs))
+	assert.True(t, errors.Is(errs[0], InvalidWhereClause))
+}
+
+func TestCorrectorWhereClauseValue(t *testing.T) {
+	sql := `SELECT * FROM path:../../testdata/data.csv AS g WHERE a = 'b'`
+	errs := IsShallowSyntaxCorrect(NewSplitter(sql))
+	assert.Equal(t, 1, len(errs))
+	assert.True(t, errors.Is(errs[0], InvalidValueChunk))
+}

@@ -3,6 +3,7 @@ package queries
 import (
 	"fmt"
 	"os"
+	"seeker/queries/operators"
 	"strings"
 )
 
@@ -56,5 +57,52 @@ func IsShallowSyntaxCorrect(s Splitter) []error {
 		errs = append(errs, InvalidAsChunk)
 	}
 
+	whereClause := chunks[6:]
+	if len(whereClause) != 0 {
+		if len(whereClause) < 4 {
+			errs = append(errs, fmt.Errorf("Expected at least a single condition for WHERE clause but got something else: %w", InvalidWhereClause))
+			return errs
+		}
+
+		where := whereClause[0]
+		operator := whereClause[2]
+		value := whereClause[3]
+
+		if strings.ToLower(where) != "where" {
+			errs = append(errs, fmt.Errorf("expected WHERE, got %s: %w", where, InvalidWhereClause))
+		}
+		if err := checkOperator(operator); err != nil {
+			errs = append(errs, err)
+		}
+		if err := checkValue(value); err != nil {
+			errs = append(errs, err)
+		}
+	}
+
 	return errs
+}
+
+func checkOperator(op string) error {
+	var found bool
+	for _, v := range operators.Operators {
+		if v == op {
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		return fmt.Errorf("expected one of valid operators: %s, got %s: %w",
+			strings.Join(operators.Operators, ","), op, InvalidWhereClause)
+	}
+
+	return nil
+}
+
+func checkValue(v string) error {
+	if v[0] != '\'' || v[len(v)-1] != '\'' {
+		return fmt.Errorf("invalid string comparison value. Comparison values should be in enclosed in single quotes: %w", InvalidValueChunk)
+	}
+
+	return nil
 }

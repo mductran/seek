@@ -39,7 +39,7 @@ func NewStructure(sql string) Result[Structure] {
 		fileDb: syntax.NewFileDb(f, alias),
 	}
 
-	resolveWhereClause(s.Chunks()[5:])
+	resolveWhereClause(s.Chunks()[6:])
 
 	return NewResult[Structure](&syntaxStructure, []error{})
 }
