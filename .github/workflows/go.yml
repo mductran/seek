@@ -10,7 +10,7 @@ jobs:
   build_and_test:
     runs-on: ubuntu-latest
     steps:
-      - uses: action/checkout@v5
+      - uses: actions/checkout@v5
 
       - name: setup
         uses: actions/setup-go@v4
